@@ -23,7 +23,7 @@ function varargout = toggle(varargin)
 
 % Edit the above text to modify the response to help toggle
 
-% Last Modified by GUIDE v2.5 12-Jul-2019 16:32:44
+% Last Modified by GUIDE v2.5 16-Jan-2020 19:26:51
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -224,7 +224,19 @@ totalfigdata = [datestr(now,'yyyy-mm-dd_HHMMSS'),'.mat'];
 diffdat = cell2mat(flipud([totaltime,meanvoltage]));
 save(totalfigdata,'diffdat');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+len = length(diffdat);
+                      %copies the data given and makes it into a new array
+x = diffdat(:,1);     %time
+y = diffdat(:,2);     %voltage
 
+for i=1:len
+    if y(i)<0.001     % if the data is very close to 0, set it to 0
+        y(i) = 0;
+    end
+end
+yplot=y;              % make a copy of the data specifically for plotting
+yplot(yplot==0)=NaN;  % replace 0 elements with NaN
+plot(handles.axes2,x,yplot)     %plot new graph on ax3, the orginal data is kept
         
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
